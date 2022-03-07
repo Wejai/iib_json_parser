@@ -26,7 +26,6 @@ import com.google.common.collect.ImmutableList;
 public class SwaggerValidate {
 
 	public static void main(String[] args) throws Exception {
-		// TODO Auto-generated method stub
 		
 		String result = validateJSONPayload("E:\\GIT\\swagger.json", "E:\\GIT\\payload.json", "/definitions/User");
         System.out.println(result);
