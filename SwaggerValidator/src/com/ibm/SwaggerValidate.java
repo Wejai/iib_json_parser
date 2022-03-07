@@ -27,24 +27,13 @@ public class SwaggerValidate {
 
 	public static void main(String[] args) throws Exception {
 		// TODO Auto-generated method stub
-		File swagger = new File("E:\\GIT\\swagger.json");
-		File payload = new File("E:\\GIT\\payload.json");
-		Reader spec = new FileReader(swagger);
-		SwaggerValidator validator = SwaggerValidator.forJsonSchema(spec);
-		String payloads = readLineByLineJava8("E:\\GIT\\payload.json");
-
-		ProcessingReport report = validator.validate(payloads, "/definitions/User");
-
-		if (report.isSuccess()) {
-		    System.out.println(report);
-		} else {
-		    ImmutableList<ProcessingMessage> messages = ImmutableList.copyOf(report);
-            System.out.println(messages.get(0).getMessage());
-		}
+		
+		String result = validateJSONPayload("E:\\GIT\\swagger.json", "E:\\GIT\\payload.json", "/definitions/User");
+        System.out.println(result);
 
 	}
 	
-	private static String readLineByLineJava8(String filePath)
+	private static String readLineByLine(String filePath)
 	{
 		StringBuilder contentBuilder = new StringBuilder();
 
@@ -58,6 +47,27 @@ public class SwaggerValidate {
 		}
 
 		return contentBuilder.toString();
+	}
+	
+	public static String validateJSONPayload(String swaggerFile, String payload, String objectDefinition) {
+		String output = "";
+		try {
+			File swagger = new File(swaggerFile);
+			Reader spec = new FileReader(swagger);
+			SwaggerValidator validator = SwaggerValidator.forJsonSchema(spec);
+			String payloads = readLineByLine(payload);
+			ProcessingReport report = validator.validate(payloads, "/definitions/User");
+	
+			if (report.isSuccess()) {
+			    output = "Success";
+			} else {
+			    ImmutableList<ProcessingMessage> messages = ImmutableList.copyOf(report);
+			    output = "Error : " + messages.get(0).getMessage();
+			}
+		} catch (Exception e) {
+			output = "Error : " + e.getMessage();
+		}
+		return output;
 	}
 
 }
